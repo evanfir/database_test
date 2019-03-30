@@ -22,14 +22,26 @@ my_cursor = mydb.cursor()
 #     session.commit()
 #     session.flush
 
-# my_cursor.execute(open("load_departments.dump").read())
-# mydb.commit()
-# my_cursor = mydb.cursor()
-
-my_cursor.execute(open("load_employees.dump").read())
+my_cursor.execute(open("load_departments.dump").read())
 mydb.commit()
 my_cursor = mydb.cursor()
 
-# my_cursor.execute(open("load_dept_manager.dump").read())
-# mydb.commit()
-# my_cursor = mydb.cursor()
+my_cursor.executescript(open("load_employees.dump").read())
+mydb.commit()
+my_cursor = mydb.cursor()
+
+my_cursor.executescript(open("load_dept_manager.dump").read())
+mydb.commit()
+my_cursor = mydb.cursor()
+
+my_cursor.executescript(open("load_dept_emp.dump").read())
+mydb.commit()
+my_cursor = mydb.cursor()
+
+my_cursor.executescript(open("load_titles.dump").read())
+mydb.commit()
+my_cursor = mydb.cursor()
+
+my_cursor.executescript(open("load_salaries1.dump").read())
+mydb.commit()
+my_cursor = mydb.cursor()
