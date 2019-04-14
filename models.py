@@ -1,16 +1,16 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, DateTime, Text, Enum
+from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, DateTime, Text, Enum, UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from contextlib import contextmanager
-import mysql.connector
+# import mysql.connector
 import enum
 
 Base = declarative_base()
 #engine = create_engine('mysql://root:ascs3Vw.@#asdcE@localhost/testDatabase', 
     # echo=True)
-engine = create_engine('sqlite:///mydb.db', echo = True) 
+engine = create_engine('sqlite:///mydb.db', echo = False) 
 
 @contextmanager
 def session_scope():
@@ -37,6 +37,21 @@ class employees(Base):
     last_name = Column(String(16), nullable=False)
     gender = Column(Enum(genderEnum), nullable=False)
     hire_date = Column(DateTime, nullable=False)
+    __table_args__ = (UniqueConstraint('emp_no'), )
+
+    def __init__(self, __tablename__, emp_no, birth_date, first_name, last_name, gender, hire_date):
+        self.dbname = __tablename__
+        self.emp_no = emp_no
+        self.birth_date = birth_date
+        self.last_name = last_name
+        self.first_name = first_name
+        self.gender = gender
+        self.hire_date = hire_date
+
+    def __str__(self):
+        
+        return ("<Table: '%s', emp_no: '%d', birth_date: '%s', first: '%s', last: '%s', gender: '%s', hire: '%s'>" % (self.dbname, self.emp_no, str(self.birth_date), self.first_name, self.last_name, str(self.gender), str(self.hire_date)))
+
 
 class departments(Base):
     __tablename__ = "departments"
