@@ -15,13 +15,13 @@ from contextlib import contextmanager
 import json as json
 import decimal, datetime
 from flask import json
-
-
+from flask_oauthlib.provider import OAuth2Provider
+from flask_bcrypt import Bcrypt
 
 
 app = Flask(__name__)
 api = Api(app)
-
+bcrypt = Bcrypt(app)
 
 parser = reqparse.RequestParser()
 
@@ -29,20 +29,21 @@ parser = reqparse.RequestParser()
 class DB(Resource):
     #adding all possible arguments to the parser
     #then we can access each with args['argument's name']
+    #location: 'header', 'json'
     parser.add_argument('db') #table name
-    parser.add_argument('emp') #emp_no
-    parser.add_argument('bd') #birth_day
-    parser.add_argument("f") #first name
-    parser.add_argument("l") #last name
-    parser.add_argument("g") #gender
-    parser.add_argument("hired") #hire_date
-    parser.add_argument("deptno") #department_no
-    parser.add_argument("deptna") #dept_name
-    parser.add_argument("from") #from_date
-    parser.add_argument("to") #to_date
-    parser.add_argument('title') #title
-    parser.add_argument('cmd')
-    parser.add_argument('new')
+    parser.add_argument('emp', location='headers') #emp_no
+    parser.add_argument('bd', location='headers') #birth_day
+    parser.add_argument("f", location='headers') #first name
+    parser.add_argument("l", location='headers') #last name
+    parser.add_argument("g", location='headers') #gender
+    parser.add_argument("hired", location='headers') #hire_date
+    parser.add_argument("deptno", location='headers') #department_no
+    parser.add_argument("deptna", location='headers') #dept_name
+    parser.add_argument("from", location='headers') #from_date
+    parser.add_argument("to", location='headers') #to_date
+    parser.add_argument('title', location='headers') #title
+    parser.add_argument('cmd', location='headers') #sql command
+    parser.add_argument('text', type = list, location='json') #always use type=list for location='json'
     # with app.app_context():
         # rr = 
     # print(request.headers)
@@ -56,7 +57,7 @@ class DB(Resource):
     #returns *
     def get(self):
         args = parser.parse_args()
-        # print(args['new'])
+        print("\n\nbodyvalue: ", ''.join(args['text']), "\n\n")
         infoList = list()
         statement = ""
         # print("\n\n",args,"\n\n")

@@ -1,0 +1,7 @@
+Collecting oauthlib
+  Using cached https://files.pythonhosted.org/packages/16/95/699466b05b72b94a41f662dc9edf87fda4289e3602ecd42d27fcaddf7b56/oauthlib-3.0.1-py2.py3-none-any.whl
+Installing collected packages: oauthlib
+  Found existing installation: oauthlib 2.1.0
+    Uninstalling oauthlib-2.1.0:
+      Successfully uninstalled oauthlib-2.1.0
+Successfully installed oauthlib-3.0.1

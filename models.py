@@ -90,6 +90,75 @@ class salaries(Base):
     salary = Column(Integer, nullable=False)
     from_date = Column(DateTime, primary_key = True, nullable=False)
     to_date = Column(DateTime, nullable=False)
+    
+class User(Base):
+    __tablename__ = "user"
 
+    id = Column(Integer, primary_key = True)
+    username = Column(String(30), nullable = False)
+
+class Client(Base):
+    __tablename__ = "client"
+
+    id = Column(Integer, primary_key = True)
+    client_id = Column(Integer)
+    
+class Grant(Base):
+    __tablename__ = "grants"
+
+    id = Column(Integer, primary_key = True)
+    user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
+    user = relationship('User')
+    client_id = Column(String(40), ForeignKey('client.client_id'), nullable=False)
+    client = relationship('Client')
+    code = Column(String(255), index=True, nullable=False)
+    redirect_uri = Column(String(255))
+    epires = Column(DateTime)
+    _scopes = Column(Text)
+
+    def delete(self):
+        Base.delete(self)
+        Base.commit()
+        return self
+
+    @property
+    def scopes(self):
+        if self._scopes:
+            return self._scopes.split()
+        return []
+
+class Token(Base):
+    __tablename__ = "token"
+
+    id =  Column( Integer, primary_key=True)
+    client_id =  Column(
+         String(40),  ForeignKey('client.client_id'),
+        nullable=False,
+    )
+    client =  relationship('Client')
+
+    user_id =  Column(
+         Integer,  ForeignKey('user.id')
+    )
+    user =  relationship('User')
+
+    # currently only bearer is supported
+    token_type =  Column( String(40))
+
+    access_token =  Column( String(255), unique=True)
+    refresh_token =  Column( String(255), unique=True)
+    expires =  Column( DateTime)
+    _scopes =  Column( Text)
+
+    def delete(self):
+        Base.delete(self)
+        Base.commit()
+        return self
+
+    @property
+    def scopes(self):
+        if self._scopes:
+            return self._scopes.split()
+        return []
 
 Base.metadata.create_all(engine)
